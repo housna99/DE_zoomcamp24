@@ -1,0 +1,12 @@
+#specify all instructions to run in order to create a new image based on what 
+# we want
+
+
+FROM python:3.9
+
+RUN pip install pandas sqlalchemy psycopg2 requests 
+
+WORKDIR /app
+COPY ingest_data_2.py ingest_data_2.py 
+
+ENTRYPOINT [ "python","homework1_sql.py" ]
