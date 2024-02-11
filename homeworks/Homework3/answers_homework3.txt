@@ -1,0 +1,23 @@
+Q1:
+ select count (*) FROM `dtc-de-410519.green_taxi_2022.green_taxi_external`
+Q2:
+SELECT count (distinct  PULocationID )  FROM `dtc-de-410519.green_taxi_2022.green_taxi_external`
+
+Q3:
+CREATE OR REPLACE TABLE `dtc-de-410519.green_taxi_2022.green_taxi_internal_nonpartitioned_tripdata`
+AS SELECT * FROM `dtc-de-410519.green_taxi_2022.green_taxi_external`;
+----
+SELECT count (*)  FROM `dtc-de-410519.green_taxi_2022.green_taxi_internal_nonpartitioned_tripdata` where fare_amount =0;
+Q4:
+the most optimized strategy in BigQuery would be to cluster on PUlocationID and partition by lpep_pickup_datetime.
+        Cluster on PUlocationID: Clustering the data based on PUlocationID ensures that rows with similar PUlocationID values are stored together in the same storage blocks. When you order the results by PUlocationID, BigQuery can efficiently retrieve the data because it's already clustered based on that column. This can significantly reduce the amount of data scanned and improve query performance.
+        Partition by lpep_pickup_datetime: Partitioning the data based on lpep_pickup_datetime allows for partition pruning when filtering data by this column. Partition pruning helps eliminate unnecessary partitions from being scanned, reducing query costs and improving performance.
+---------
+CREATE TABLE `dtc-de-410519.green_taxi_2022_2022.green_taxi_internal_partitioned_tripdata`
+PARTITION BY lpep_pickup_datetime
+CLUSTER BY PUlocationID AS (
+  SELECT * FROM `dtc-de-410519.green_taxi_2022.green_taxi_internal_nonpartitioned_tripdata`
+);
+Q5: 
+
+
