@@ -14,7 +14,7 @@ with fhv_tripdata as
 select
     -- identifiers
     {{ dbt_utils.generate_surrogate_key(['dispatching_base_num', 'pickup_datetime']) }} as tripid,
-    {{ dbt.safe_cast("dispatching_base_num", api.Column.translate_type("integer")) }} as dispatching_base_num,
+    {{ dbt.safe_cast("dispatching_base_num", api.Column.translate_type("string")) }} as dispatching_base_num,
    
     cast(PUlocationID as integer) as pickup_locationid,
     cast(DOlocationID as integer) as dropoff_locationid,
